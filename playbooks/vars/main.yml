@@ -59,7 +59,8 @@ ops_neutron_debug_packages:
 
 # All OPS tools are now installed inside a python venv
 ops_venv: "/openstack/venvs/rcbops-{{ openstack_release |default('0.0.0') }}"
-ops_python_interpreter: "{% if inventory_hostname == 'localhost' -%}/usr/bin/python3{% else -%}{{ ansible_python['executable'] }}{% endif -%}"
+#ops_python_interpreter: "{% if inventory_hostname == 'localhost' -%}/usr/bin/python3{% else -%}{{ ansible_python['executable'] }}{% endif -%}"
+ops_python_interpreter: "{% if inventory_hostname == 'localhost' -%}/usr/bin/python3{% endif -%}"
 ops_package_cache_timeout: "{{ cache_timeout | default('3600') }}"
 
 # Limit openstack requirements to Stein when not automatically determined

@@ -18,7 +18,8 @@
   tasks:
     - include_vars: "{{ item }}"
       with_first_found:
-        - "/opt/openstack-ansible/playbooks/defaults/repo_packages/openstack_services.yml"
+        # - "/opt/openstack-ansible/playbooks/defaults/repo_packages/openstack_services.yml"
+        - "/opt/openstack-ansible/inventory/group_vars/all/source_git.yml"
       when: '"RPCO" in openstack_product'
 
     - set_fact:
@@ -36,7 +37,7 @@
         name: "{{ ops_apt_host_packages }}"
         state: present
       when:
-        - ansible_facts['virtualization_role'] == 'host'
+        - ansible_facts['virtualization_role'] == 'guest'
       tags:
         - always
         - package-install

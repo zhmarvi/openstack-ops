@@ -34,8 +34,8 @@
       package:
         name: "bind9"
         state: latest
-        update_cache: "{{ (ansible_pkg_mgr == 'apt') | ternary('yes', omit) }}"
-        cache_valid_time: "{{ (ansible_pkg_mgr == 'apt') | ternary(ops_package_cache_timeout, omit) }}"
+        #update_cache: "{{ (ansible_pkg_mgr == 'apt') | ternary('yes', omit) }}"
+        #cache_valid_time: "{{ (ansible_pkg_mgr == 'apt') | ternary(ops_package_cache_timeout, omit) }}"
       register: install_packages
       until: install_packages is success
       retries: 2
@@ -47,7 +47,8 @@
         dest: /etc/bind/named.conf.options
         owner: root
         group: root
-      notify: Restart BIND
+      notify: 
+        -  Restart BIND
 
     - name: Create needed directories
       file:
@@ -58,7 +59,8 @@
       with_items:
         - "/var/cache/bind/data"
         - "/var/cache/bind/dynamic"
-      notify: Restart BIND
+      notify: 
+        - Restart BIND
 
     - name: Pull one of the keys off one of the bind hosts
       fetch:
@@ -71,9 +73,10 @@
       copy:
         src: /tmp/rndc.key
         dest: /etc/bind/rndc.key
-      notify: Restart BIND
+      notify: 
+        - Restart BIND
   handlers:
-    - include: "handlers/main.yml"
+    - include_tasks: "handlers/main.yml"
   vars_files:
     - "vars/main.yml"
 
@@ -98,14 +101,14 @@
           package:
             name: bind9utils
             state: latest
-            update_cache: "{{ (ansible_pkg_mgr == 'apt') | ternary('yes', omit) }}"
-            cache_valid_time: "{{ (ansible_pkg_mgr == 'apt') | ternary(ops_package_cache_timeout, omit) }}"
+            #update_cache: "{{ (ansible_pkg_mgr == 'apt') | ternary('yes', omit) }}"
+            #cache_valid_time: "{{ (ansible_pkg_mgr == 'apt') | ternary(ops_package_cache_timeout, omit) }}"
           register: install_packages
           until: install_packages is success
           retries: 2
           delay: 2
   handlers:
-    - include: "handlers/main.yml"
+    - include_tasks: "handlers/main.yml"
   vars_files:
     - "vars/main.yml"
 
